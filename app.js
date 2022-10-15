@@ -2,7 +2,7 @@ const express = require("express");
 const { default: mongoose } = require("mongoose");
 const app = express();
 const cors = require("cors");
-const host = "tarebodb.vercel.app";
+const host = 3000;
 
 app.use(cors());
 
