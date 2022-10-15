@@ -6,12 +6,12 @@ const reviewSchema = new mongoose.Schema({
         type: String,
         // required: true
     },
-    startDate: {
-        type: Date,
+    like: {
+        type: Number,
         // required: true
     },
-    endDate: {
-        type: Date,
+    content: {
+        type: String,
         // required: true
     },
     createDate: {
@@ -20,7 +20,7 @@ const reviewSchema = new mongoose.Schema({
     },
     belongTo: {
         type: ObjectId,
-        ref: User
+        ref: Trip
     }
 })
 

@@ -1,13 +1,13 @@
 const { default: mongoose } = require("mongoose");
-const Trip = mongoose.model("Trip");
+const Review = mongoose.model("Review");
 
 //DEDICATED FUNCTIONS=================================
 async function findOne(req, res, id) {
-  Trip.find({
+  Review.find({
     _id: id,
   })
-    .then((trip) => {
-      return res.json(trip);
+    .then((review) => {
+      return res.json(review);
     })
     .catch((err) => {
       console.log(err);
@@ -15,11 +15,11 @@ async function findOne(req, res, id) {
 }
 
 async function findMany(req, res) {
-  Trip.find()
+  Review.find()
     .populate("belongTo")
     .select()
-    .then((trip) => {
-      return res.json(trip);
+    .then((review) => {
+      return res.json(review);
     })
     .catch((err) => {
       console.log(err);
@@ -28,8 +28,8 @@ async function findMany(req, res) {
 
 async function createOne(req, res) {
   const title = req.body.title;
-  const startDate = req.body.startDate;
-  const endDate = req.body.endDate;
+  const like = req.body.like;
+  const content = req.body.content;
   const createDate = req.body.createDate;
 
   // if (!email || !username || !password) {
@@ -37,52 +37,45 @@ async function createOne(req, res) {
   // }
   //make password not show on database
   // req.user.password = undefined
-  const count = await checkCount(req, res);
-  console.log(count);
-
-  if (count > 2) {
-    res
-      .status(200)
-      .json({ msg: "Only Premium members can create more than 2 trips" });
-  } else {
-    const trip = new Trip({
-      //key and value are the same so only need to type one
-      title,
-      startDate,
-      endDate,
-      createDate,
-      belongTo: req.user._id,
-    });
-    trip
-      .save()
-      .then((result) => {
-        return res.json(result);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-}
-
-async function updateOne(req, res) {
-  const title = req.body.title;
-  const startDate = req.body.startDate;
-  const endDate = req.body.endDate;
-  const createDate = req.body.createDate;
-
-  // if (!email || !username || !password) {
-  //     res.status(422).json({ error: "Please add all the fields" })
-  // }
-  //make password not show on database
-  // req.user.password = undefined
-  const trip = new Trip({
+  req.user.password = undefined;
+  const review = new Review({
     //key and value are the same so only need to type one
     title,
     startDate,
     endDate,
-    createDate,
+    createDate: review.createdAt,
+    belongTo: req.user,
   });
-  trip
+  review
+    .save()
+    .then((result) => {
+      return res.json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+async function updateOne(req, res) {
+  const title = req.body.title;
+  const like = req.body.like;
+  const content = req.body.content;
+  const createDate = req.body.createDate;
+
+  // if (!email || !username || !password) {
+  //     res.status(422).json({ error: "Please add all the fields" })
+  // }
+  //make password not show on database
+  // req.user.password = undefined
+  const review = new Review({
+    //key and value are the same so only need to type one
+    title,
+    startDate,
+    endDate,
+    createDate: review.createdAt,
+    belongTo: req.user,
+  });
+  review
     .save()
     .then((result) => {
       return res.json(result);
@@ -94,54 +87,46 @@ async function updateOne(req, res) {
 
 async function deleteOne(req, res) {
   try {
-    await Trip.deleteOne({ _id: req.params.id });
+    await Review.deleteOne({ _id: req.params.id });
     res.status(200).send();
   } catch {
     res.status(200);
-    res.send({ msg: "Trip doesn't exist!", code: "400" });
+    res.send({ msg: "Review doesn't exist!", code: "400" });
   }
-}
-
-async function checkCount(req, res) {
-  const count =
-    (await Trip.collection.countDocuments({
-      belongTo: req.user._id,
-    })) + 1;
-  return count;
 }
 
 //=====================================================================================
 
 //REST API GET=================================================
-const getTrip = (req, res) => {
+const getReview = (req, res) => {
   const id = req.params;
   findOne(req, res);
 };
 
-const getAllTrip = (req, res) => {
+const getAllReview = (req, res) => {
   findMany(req, res);
 };
 
 //REST API POST=================================================
-const createTrip = (req, res) => {
+const createReview = (req, res) => {
   createOne(req, res);
   console.log("created");
 };
 
 //REST API PUT=================================================
-const updateTrip = (req, res) => {
+const updateReview = (req, res) => {
   updateOne(req, res);
 };
 
 //REST API DELETE=================================================
-const deleteTrip = (req, res) => {
+const deleteReview = (req, res) => {
   deleteOne(req, res);
 };
 
 module.exports = {
-  getTrip,
-  getAllTrip,
-  createTrip,
-  updateTrip,
-  deleteTrip,
+  getReview,
+  getAllReview,
+  createReview,
+  updateReview,
+  deleteReview,
 };

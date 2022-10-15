@@ -1,8 +1,7 @@
 {
-    "_id": "1",
-    "username": "",
-    "password": "",
-    "email": "",
-    "role": ["user", "admin"],
+    "username": "hung nguyen",
+    "password": "147",
+    "email": "cumdump@gmai.com",
+    "role": "user",
     "isPremium": false
 }

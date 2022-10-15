@@ -21,14 +21,14 @@ router.post("/signup", (req, res) => {
   const { role } = "user";
   const isPremium = false;
   if (!email || !password || !username) {
-    return res.status(422).json({ error: "please add all the fields" });
+    return res.status(200).json({ msg: "Please add all the fields", code: "400" });
   }
   User.findOne({ email: email })
     .then((savedUser) => {
       if (savedUser) {
         return res
-          .status(422)
-          .json({ error: "useralready exists with that email" });
+          .status(200)
+          .json({ msg: "useralready exists with that email", code: "400" });
       }
       //Hash here
       bcrypt.hash(password, 12).then((hashedpassword) => {
@@ -70,7 +70,7 @@ router.post("/signin", (req, res) => {
       .then((doMatch) => {
         if (doMatch) {
           // res.json({ message: "successfully signed, welcome " + savedUser.name + "!" })
-          const accessToken = jwt.sign({ _id: savedUser._id }, JWT_SECRET, {expiresIn: 60*10 });
+          const accessToken = jwt.sign({ _id: savedUser._id }, JWT_SECRET);
           res.status(200).json({ msg: "Login successfully", code: 200, accessToken, data: savedUser });
         } else {
           res.status(400).json({ error: "Invaild Email or password" });
