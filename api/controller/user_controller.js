@@ -29,6 +29,7 @@ async function createOne(req, res) {
     const username = req.body.username;
     const password = req.body.password;
     const email = req.body.email;
+    const phone = req.body.phone;
     const role = "user";
     const isPremium = false;
 
@@ -43,6 +44,7 @@ async function createOne(req, res) {
         username,
         password,
         email,
+        phone,
         role,
         isPremium
     })
@@ -60,6 +62,7 @@ async function updateOne(req, res) {
     const username = req.body.username;
     const password = req.body.password;
     const email = req.body.email;
+    const phone = req.body.phone
     const role = "user";
     const isPremium = false;
 
@@ -74,6 +77,7 @@ async function updateOne(req, res) {
         username,
         password,
         email,
+        phone,
         role,
         isPremium
     })

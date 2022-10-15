@@ -17,10 +17,10 @@ router.get("/protected", requireLogin, (req, res) => {
 });
 
 router.post("/signup", (req, res) => {
-  const { _id, username, email, password } = req.body;
+  const { _id, username, email, password, phone } = req.body;
   const { role } = "user";
   const isPremium = false;
-  if (!email || !password || !username) {
+  if (!email || !password || !username || !phone) {
     return res.status(200).json({ msg: "Please add all the fields", code: "400" });
   }
   User.findOne({ email: email })
@@ -37,6 +37,7 @@ router.post("/signup", (req, res) => {
           username,
           password: hashedpassword,
           email,
+          phone,
           role,
           isPremium,
         });
