@@ -1,6 +1,7 @@
 const express = require("express");
 const { default: mongoose } = require("mongoose");
 const app = express();
+const cors = require('cors')
 const host = 3000;
 
 //=========================================================================================================================
@@ -37,6 +38,8 @@ app.use(express.urlencoded({ extended: false }));
 
 //parse json
 app.use(express.json());
+
+app.use(cors())
 
 app.use("/", user);
 app.use("/", trip);
