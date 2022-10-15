@@ -16,6 +16,7 @@ async function findOne(req, res, id) {
 
 async function findMany(req, res) {
   Trip.find()
+    .populate('belongTo').select()
     .then((trip) => {
       return res.json(trip);
     })
@@ -25,7 +26,6 @@ async function findMany(req, res) {
 }
 
 async function createOne(req, res) {
-    const _id = req.body._id;
     const title = req.body.title;
     const startDate = req.body.startDate;
     const endDate = req.body.endDate
@@ -36,15 +36,16 @@ async function createOne(req, res) {
     // }
     //make password not show on database
     // req.user.password = undefined
+    req.user.password = undefined
     const trip = new Trip({
         //key and value are the same so only need to type one
-        _id,
         title,
         startDate,
         endDate,
-        createDate
+        createDate,
+        belongTo: req.user
     })
-    user.save().then(result => {
+    trip.save().then(result => {
        return res.json(result)
     })
         .catch(err => {
@@ -54,7 +55,6 @@ async function createOne(req, res) {
 }
 
 async function updateOne(req, res) {
-    const _id = req.body._id;
     const title = req.body.title;
     const startDate = req.body.startDate;
     const endDate = req.body.endDate
@@ -67,13 +67,12 @@ async function updateOne(req, res) {
     // req.user.password = undefined
     const trip = new Trip({
         //key and value are the same so only need to type one
-        _id,
         title,
         startDate,
         endDate,
         createDate
     })
-    user.save().then(result => {
+    trip.save().then(result => {
        return res.json(result)
     })
         .catch(err => {
@@ -84,10 +83,10 @@ async function updateOne(req, res) {
 async function deleteOne(req, res) {
     try {
 		await Trip.deleteOne({ _id: req.params.id })
-		res.status(204).send()
+		res.status(200).send()
 	} catch {
-		res.status(404)
-		res.send({ error: "Trip doesn't exist!" })
+		res.status(200)
+		res.send({ msg: "Trip doesn't exist!", code: "400" })
 	}
 }
 
@@ -106,6 +105,7 @@ const getAllTrip = (req, res) => {
 //REST API POST=================================================
 const createTrip = (req, res) => {
   createOne(req, res);
+  console.log("created");
 };
 
 //REST API PUT=================================================

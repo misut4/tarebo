@@ -64,10 +64,10 @@ async function updateOne(req, res) {
     const isPremium = false;
 
     if (username ) {
-        res.status(422).json({ error: "Please add all the fields" })
+        res.status(200).json({ msg: "Please add all the fields", code: "400" })
     }
     //make password not show on database
-    // req.user.password = undefined
+    req.user.password = undefined
     const user = new User({
         //key and value are the same so only need to type one
         _id,
@@ -90,8 +90,8 @@ async function deleteOne(req, res) {
 		await User.deleteOne({ _id: req.params.id })
 		res.status(204).send()
 	} catch {
-		res.status(404)
-		res.send({ error: "User doesn't exist!" })
+		res.status(200)
+		res.send({ msg: "User doesn't exist!", code: "400" })
 	}
 }
 

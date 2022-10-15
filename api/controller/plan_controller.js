@@ -16,7 +16,8 @@ async function findOne(req, res, id) {
 
 async function findMany(req, res) {
   Plan.find()
-    .then((plan) => {
+    .populate('belongTo')
+    .then(plan => {
       return res.json(plan);
     })
     .catch((err) => {
@@ -34,13 +35,15 @@ async function createOne(req, res) {
     // }
     //make password not show on database
     // req.user.password = undefined
+    
     const plan = new Plan({
         //key and value are the same so only need to type one
         _id,
         name,
-        place_id
+        place_id,
+        belongTo: req.trip
     })
-    user.save().then(result => {
+    plan.save().then(result => {
        return res.json(result)
     })
         .catch(err => {
@@ -55,7 +58,7 @@ async function updateOne(req, res) {
     const place_id = req.body.place_id
 
     if (username ) {
-        res.status(422).json({ error: "Please add all the fields" })
+        res.status(200).json({ msg: "Please add all the fields", code: 400 })
     }
     //make password not show on database
     // req.user.password = undefined
@@ -65,7 +68,7 @@ async function updateOne(req, res) {
         name,
         place_id
     })
-    user.save().then(result => {
+    plan.save().then(result => {
        return res.json(result)
     })
         .catch(err => {
@@ -78,8 +81,8 @@ async function deleteOne(req, res) {
 		await Plan.deleteOne({ _id: req.params.id })
 		res.status(204).send()
 	} catch {
-		res.status(404)
-		res.send({ error: "Plan doesn't exist!" })
+		res.status(200)
+		res.send({ msg: "Plan doesn't exist!", code: "400" })
 	}
 }
 

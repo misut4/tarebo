@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const { default: mongoose } = require("mongoose");
 const expenseSchema = new mongoose.Schema({
     description: {
@@ -7,6 +8,10 @@ const expenseSchema = new mongoose.Schema({
     amount: {
         type: Number,
         required: true
+    },
+    belongTo: {
+        type: ObjectId,
+        ref: "Trip"
     }
 })
 

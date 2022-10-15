@@ -1,7 +1,7 @@
 const { ObjectId } = require("mongodb");
 const { default: mongoose } = require("mongoose");
-const  User  = mongoose.model("User");
-const tripSchema = new mongoose.Schema({
+const  Trip  = mongoose.model("Trip");
+const reviewSchema = new mongoose.Schema({
     title: {
         type: String,
         // required: true
@@ -24,4 +24,4 @@ const tripSchema = new mongoose.Schema({
     }
 })
 
-mongoose.model("Trip", tripSchema);
+mongoose.model("Review", reviewSchema);
