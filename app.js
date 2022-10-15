@@ -68,14 +68,14 @@ app.use(express.urlencoded({ extended: false }));
 //parse json
 app.use(express.json());
 
-app.use("/", auth);
-app.use("/", reqLogin);
-app.use("/", user);
-app.use("/", trip);
-app.use("/", plan);
-app.use("/", todo);
-app.use("/", expense);
-app.use("/", review);
+app.use("/auth", auth);
+app.use("/token", reqLogin);
+app.use("/user", user);
+app.use("/trip", trip);
+app.use("/plan", plan);
+app.use("/todo", todo);
+app.use("/expense", expense);
+app.use("/review", review);
 
 app.listen(host, () => {
   console.log("Server is listening...");
