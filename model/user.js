@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         // require:true
     },
+    avatar: {
+        type: String,
+        default: "https://cdn-icons-png.flaticon.com/512/147/147142.png"
+    },
     role: {
         type: String,
         // required: true,
