@@ -1,5 +1,6 @@
 const { default: mongoose } = require("mongoose");
-const  Todo  = mongoose.model("Todo");
+// const  Todo  = mongoose.model("Todo");
+const Todo = require('../../model/todo')
 
 //DEDICATED FUNCTIONS=================================
 async function findOne(req, res, id) {
@@ -25,27 +26,28 @@ async function findMany(req, res) {
 }
 
 async function createOne(req, res) {
-    const _id = req.body._id;
-    const content = req.body.content;
-    
+  req.body.todo.forEach(async (element) => {
+    const _id = element._id;
+    const content = element.content;
+    const place_id = element.place_id;
+    const place_name = element.place_name;
+    const trip_id = element.trip_id;
 
-    // if (!email || !username || !password) {
-    //     res.status(422).json({ error: "Please add all the fields" })
-    // }
-    //make password not show on database
-    // req.user.password = undefined
-    const todo = new Todo({
-        //key and value are the same so only need to type one
-        _id,
-        content,
-        belongTo: req.trip
-    })
-    todo.save().then(result => {
-       return res.json(result)
-    })
-        .catch(err => {
-            console.log(err)
-        })
+    console.log(element.name);
+
+    element = new Todo({
+      //key and value are the same so only need to type one
+      _id,
+      content,
+      place_id,
+      place_name,
+      belongTo: trip_id,
+    });
+    await element.save().catch((err) => {
+      console.log(err);
+    });
+  });
+  return res.status(200).json({msg: "success"})
 
 }
 

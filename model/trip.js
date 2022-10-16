@@ -19,9 +19,9 @@ const tripSchema = new mongoose.Schema({
         // required: true,
     },
     belongTo: {
-        type: ObjectId,
+        type: String,
         ref: User
     }
 })
 
-mongoose.model("Trip", tripSchema);
+module.exports = mongoose.model("Trip", tripSchema);

@@ -18,10 +18,23 @@ const reviewSchema = new mongoose.Schema({
         type: Date,
         // required: true,
     },
+    category: {
+        type: String,
+        enum: ["restaurant", "place", "bar/pub", "none"],
+        default: "none",
+      },
+    img: {
+        type: String,
+    },
+    place_name: {
+        type: String,
+    },
     belongTo: {
-        type: ObjectId,
-        ref: Trip
+        type: String,
+    },
+    belongToTrip: {
+        type: String,
     }
 })
 
-mongoose.model("Review", reviewSchema);
+module.exports = mongoose.model("Review", reviewSchema);

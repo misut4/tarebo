@@ -1,5 +1,6 @@
 const { default: mongoose } = require("mongoose");
-const  Expense  = mongoose.model("Expense");
+// const  Expense  = mongoose.model("Expense");
+const Expense = require('../../model/expense')
 
 //DEDICATED FUNCTIONS=================================
 async function findOne(req, res, id) {
@@ -25,31 +26,33 @@ async function findMany(req, res) {
 }
 
 async function createOne(req, res) {
-    const _id = req.body._id;
-    const description = req.body.description;
-    const amount = req.body.amount;
-    const purpose = req.body.purpose
+  console.log(req.body.expense);
+  req.body.expense.forEach(async (element) => {
+    const _id = element._id;
+    const description = element.description;
+    const amount = element.amount;
+    const category = element.category;
+    const place_id = element.place_id;
+    const place_name = element.place_name;
+    const trip_id = element.trip_id;
 
-    // if (!email || !username || !password) {
-    //     res.status(422).json({ error: "Please add all the fields" })
-    // }
-    //make password not show on database
-    // req.user.password = undefined
-    const expense = new Expense({
-        //key and value are the same so only need to type one
-        _id,
-        description,
-        amount,
-        purpose,
-        belongTo: req.trip
-    })
-    expense.save().then(result => {
-       return res.json(result)
-    })
-        .catch(err => {
-            console.log(err)
-        })
+    console.log(element.category);
 
+    element = new Expense({
+      //key and value are the same so only need to type one
+      _id,
+      description,
+      amount,
+      category,
+      place_id,
+      place_name,
+      belongTo: trip_id,
+    });
+    await element.save().catch((err) => {
+      console.log(err);
+    });
+  });
+  return res.status(200).json({msg: "success"})
 }
 
 async function updateOne(req, res) {

@@ -1,17 +1,29 @@
 const { default: mongoose } = require("mongoose");
-const Trip = mongoose.model("Trip");
+const user = require("../../model/user");
+// const Trip = mongoose.model("Trip");
+const Trip = require("../../model/trip");
+const Todo = require("../../model/todo");
+const Expense = require("../../model/expense");
+const Plan = require("../../model/plan");
+const { ObjectId } = require("mongodb");
 
 //DEDICATED FUNCTIONS=================================
-async function findOne(req, res, id) {
-  Trip.find({
-    _id: id,
-  })
-    .then((trip) => {
-      return res.json(trip);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+async function findOne(req, res, _id) {
+  const [listPlan, listTodo, listExpense] = await Promise.all([
+    Plan.find({
+      belongTo: _id,
+    }).exec(),
+    Todo.find({
+      belongTo: _id,
+    }).exec(),
+    Expense.find({
+      belongTo: _id,
+    }).exec(),
+  ]);
+
+  res
+    .status(200)
+    .json({ msg: "success", code: 200, listPlan, listTodo, listExpense });
 }
 
 async function findMany(req, res) {
@@ -32,15 +44,11 @@ async function createOne(req, res) {
   const endDate = req.body.endDate;
   const createDate = req.body.createDate;
 
-  // if (!email || !username || !password) {
-  //     res.status(422).json({ error: "Please add all the fields" })
-  // }
-  //make password not show on database
-  // req.user.password = undefined
   const count = await checkCount(req, res);
   console.log(count);
+  console.log(req.user.isPremium);
 
-  if (count > 2) {
+  if (count > 2 && req.user.isPremium != true) {
     res
       .status(200)
       .json({ msg: "Only Premium members can create more than 2 trips" });
@@ -114,8 +122,8 @@ async function checkCount(req, res) {
 
 //REST API GET=================================================
 const getTrip = (req, res) => {
-  const id = req.params;
-  findOne(req, res);
+  const _id = req.body;
+  findOne(req, res, _id);
 };
 
 const getAllTrip = (req, res) => {

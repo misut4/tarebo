@@ -6,7 +6,7 @@ const todoSchema = new mongoose.Schema({
         // required: true
     },
     belongTo: {
-        type: ObjectId,
+        type: String,
         ref: "Trip"
     }
 })

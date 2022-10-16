@@ -1,5 +1,8 @@
+const { ObjectId } = require("mongodb");
 const { default: mongoose } = require("mongoose");
-const  User  = mongoose.model("User");
+// const  User  = mongoose.model("User");
+const User = require('../../model/user')
+
 
 //DEDICATED FUNCTIONS=================================
 async function findOne(req, res, id) {
@@ -32,6 +35,7 @@ async function createOne(req, res) {
     const phone = req.body.phone;
     const role = "user";
     const isPremium = false;
+
 
     // if (!email || !username || !password) {
     //     res.status(422).json({ error: "Please add all the fields" })
@@ -133,3 +137,4 @@ module.exports = {
   updateUser,
   deleteUser,
 };
+

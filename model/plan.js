@@ -10,9 +10,9 @@ const planSchema = new mongoose.Schema({
         // required: true
     },
     belongTo: {
-        type: ObjectId,
+        type: String,
         ref: "Trip"
     }
 })
 
-mongoose.model("Plan", planSchema);
+module.exports = mongoose.model("Plan", planSchema);

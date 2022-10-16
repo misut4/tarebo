@@ -1,11 +1,12 @@
 const { default: mongoose } = require("mongoose");
-const  Plan  = mongoose.model("Plan");
+// const Plan = mongoose.model("Plan");
+const Plan = require('../../model/plan')
 
 //DEDICATED FUNCTIONS=================================
 async function findOne(req, res, id) {
-    Plan.find({
-        _id: id
-    })
+  Plan.find({
+    _id: id,
+  })
     .then((plan) => {
       return res.json(plan);
     })
@@ -16,8 +17,8 @@ async function findOne(req, res, id) {
 
 async function findMany(req, res) {
   Plan.find()
-    .populate('belongTo')
-    .then(plan => {
+    .populate("belongTo")
+    .then((plan) => {
       return res.json(plan);
     })
     .catch((err) => {
@@ -26,64 +27,66 @@ async function findMany(req, res) {
 }
 
 async function createOne(req, res) {
-    const _id = req.body._id;
-    const name = req.body.name;
-    const place_id = req.body.place_id
+  console.log(req.body.plan);
 
-    // if (!email || !username || !password) {
-    //     res.status(422).json({ error: "Please add all the fields" })
-    // }
-    //make password not show on database
-    // req.user.password = undefined
-    
-    const plan = new Plan({
-        //key and value are the same so only need to type one
-        _id,
-        name,
-        place_id,
-        belongTo: req.trip
-    })
-    plan.save().then(result => {
-       return res.json(result)
-    })
-        .catch(err => {
-            console.log(err)
-        })
+  req.body.plan.forEach(async (element) => {
+    const _id = element._id;
+    const name = element.name;
+    const place_id = element.place_id;
+    const place_name = element.place_name;
+    const trip_id = element.trip_id;
 
+    console.log(element.name);
+
+    element = new Plan({
+      //key and value are the same so only need to type one
+      _id,
+      name,
+      place_id,
+      place_name,
+      belongTo: trip_id,
+    });
+    await element.save().catch((err) => {
+      console.log(err);
+    });
+  });
+  return res.status(200).json({msg: "success"})
 }
 
 async function updateOne(req, res) {
-    const _id = req.body._id;
-    const name = req.body.name;
-    const place_id = req.body.place_id
+  const _id = req.body._id;
+  const name = req.body.name;
+  const place_id = req.body.place_id;
 
-    if (username ) {
-        res.status(200).json({ msg: "Please add all the fields", code: 400 })
-    }
-    //make password not show on database
-    // req.user.password = undefined
-    const plan = new Plan({
-        //key and value are the same so only need to type one
-        _id,
-        name,
-        place_id
+  if (username) {
+    res.status(200).json({ msg: "Please add all the fields", code: 400 });
+  }
+  //make password not show on database
+  // req.user.password = undefined
+  const plan = new Plan({
+    //key and value are the same so only need to type one
+    _id,
+    name,
+    place_id,
+  });
+  plan
+    .save()
+    .then((result) => {
+      return res.json(result);
     })
-    plan.save().then(result => {
-       return res.json(result)
-    })
-        .catch(err => {
-            console.log(err)
-        })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 async function deleteOne(req, res) {
-    try {
-		await Plan.deleteOne({ _id: req.params.id })
-		res.status(204).send()
-	} catch {
-		res.status(200)
-		res.send({ msg: "Plan doesn't exist!", code: "400" })
-	}
+  try {
+    await Plan.deleteOne({ _id: req.params.id });
+    res.status(204).send();
+  } catch {
+    res.status(200);
+    res.send({ msg: "Plan doesn't exist!", code: "400" });
+  }
 }
 
 //=====================================================================================
