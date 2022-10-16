@@ -27,16 +27,26 @@ async function findOne(req, res, _id) {
 }
 
 async function findMany(req, res) {
-  Trip.find()
-    .populate("belongTo")
-    .select()
-    .then((trip) => {
-      return res.json(trip);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  const listTrip = await Trip.find().exec()
+  
+  res.status(200).json({
+    msg: "success",
+    listTrip
+  })
 }
+
+async function findByUserId(req, res) {
+  const listTrip = await Trip.find({
+    belongTo: req.body._id
+  })
+  
+  res.status(200).json({
+    msg: "success",
+    listTrip
+  })
+}
+
+
 
 async function createOne(req, res) {
   const title = req.body.title;

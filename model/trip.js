@@ -1,6 +1,5 @@
 const { ObjectId } = require("mongodb");
 const { default: mongoose } = require("mongoose");
-const  User  = mongoose.model("User");
 const tripSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -20,7 +19,6 @@ const tripSchema = new mongoose.Schema({
     },
     belongTo: {
         type: String,
-        ref: User
     }
 })
 

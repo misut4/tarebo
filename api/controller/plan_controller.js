@@ -16,14 +16,12 @@ async function findOne(req, res, id) {
 }
 
 async function findMany(req, res) {
-  Plan.find()
-    .populate("belongTo")
-    .then((plan) => {
-      return res.json(plan);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  const listPlan = await Plan.find().exec()
+  
+  res.status(200).json({
+    msg: "success",
+    listPlan
+  })
 }
 
 async function createOne(req, res) {

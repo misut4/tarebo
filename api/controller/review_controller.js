@@ -3,6 +3,7 @@ const { default: mongoose } = require("mongoose");
 const Review = require("../../model/review");
 const Trip = require("../../model/trip");
 const Plan = require("../../model/plan");
+const getAllPlan = require("./plan_controller");
 
 //DEDICATED FUNCTIONS=================================
 async function findOne(req, res, _id) {
@@ -18,28 +19,70 @@ async function findOne(req, res, _id) {
 }
 
 async function findMany(req, res) {
-  const listReview = await Review.find().exec()
-  
+  const listReview = await Review.find().exec();
+
   res.status(200).json({
     msg: "success",
-    listReview
-  })
+    listReview,
+  });
 }
 
 async function findByCate(req, res) {
   const categoryId = req.body;
   const listReview = await Review.find({
-    category: categoryId
-  })
-  
+    category: categoryId,
+  });
+
   res.status(200).json({
     msg: "success",
-    listReview
-  })
+    listReview,
+  });
 }
 
 async function cloneReview(req, res) {
-  
+  const id = req.body._id;
+  console.log(id);
+  const review = await Review.findOne({
+    _id: id,
+  });
+
+  const trip = new Trip({
+    //key and value are the same so only need to type one
+    title: req.body.title,
+    belongTo: req.user._id,
+  });
+  trip.save();
+
+  // const listPlan = await Plan.find({
+  //   _id: review.belongToTrip,
+  // });
+
+  const listPlan = req.body.listPlan
+
+  listPlan.forEach(async (element) => {
+    const _id = element._id;
+    const name = element.name;
+    const place_id = element.place_id;
+    const place_name = element.place_name;
+    const trip_id = trip._id;
+
+    console.log(listPlan);
+
+    const plan = new Plan({
+      //key and value are the same so only need to type one
+      name,
+      place_id,
+      place_name,
+      belongTo: trip_id,
+    });
+    await plan
+      .save()
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+  return res.status(200).json({ msg: "success" });
+  // return res.status(200).json({msg: "we bad", code: 400})
 }
 
 async function createOne(req, res) {
@@ -163,8 +206,8 @@ const createReview = (req, res) => {
 };
 
 const shareReview = (req, res) => {
-  cloneReview(req, res)
-}
+  cloneReview(req, res);
+};
 
 //REST API PUT=================================================
 const updateReview = (req, res) => {
@@ -182,5 +225,5 @@ module.exports = {
   createReview,
   updateReview,
   deleteReview,
-  shareReview
+  shareReview,
 };

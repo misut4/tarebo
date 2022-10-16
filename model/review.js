@@ -1,6 +1,5 @@
 const { ObjectId } = require("mongodb");
 const { default: mongoose } = require("mongoose");
-const  Trip  = mongoose.model("Trip");
 const reviewSchema = new mongoose.Schema({
     title: {
         type: String,
