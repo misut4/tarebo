@@ -191,7 +191,7 @@ async function deleteOne(req, res) {
 
 //REST API GET=================================================
 const getReview = (req, res) => {
-  const _id = req.body;
+  const _id = req.params;
   findOne(req, res, _id);
 };
 
