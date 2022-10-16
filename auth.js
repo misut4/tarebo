@@ -59,7 +59,7 @@ router.post("/signup", (req, res) => {
 });
 
 router.post("/signin", (req, res) => {
-  const { email, password } = req.body;
+  const { email, password } = req.params;
   if (!email || !password) {
     res.status(200).json({ msg: "please add email or password", code: 400 });
   }
