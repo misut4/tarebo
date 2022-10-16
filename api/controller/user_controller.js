@@ -32,6 +32,8 @@ async function createOne(req, res) {
   const _id = req.body._id;
   const username = req.body.username;
   const password = req.body.password;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
   const email = req.body.email;
   const phone = req.body.phone;
   const role = "user";
@@ -47,6 +49,8 @@ async function createOne(req, res) {
     _id,
     username,
     password,
+    firstName,
+    lastName,
     email,
     phone,
     role,
@@ -66,10 +70,13 @@ async function updateOne(req, res) {
   const _id = req.body._id;
   const username = req.body.username;
   const password = req.body.password;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
   const email = req.body.email;
   const phone = req.body.phone;
   const role = "user";
   const isPremium = false;
+
 
   if (username) {
     res.status(200).json({ msg: "Please add all the fields", code: "400" });
@@ -81,6 +88,8 @@ async function updateOne(req, res) {
     _id,
     username,
     password,
+    firstName,
+    lastName,
     email,
     phone,
     role,
