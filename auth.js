@@ -1,7 +1,8 @@
 const express = require("express");
 const { default: mongoose } = require("mongoose");
 const router = express.Router();
-const User = mongoose.model("User");
+// const User = mongoose.model("User");
+const User = require('./model/user')
 //hash user password
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
