@@ -18,15 +18,28 @@ async function findOne(req, res, _id) {
 }
 
 async function findMany(req, res) {
-  Review.find()
-    .populate("belongTo")
-    .select()
-    .then((review) => {
-      return res.json(review);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  const listReview = await Review.find().exec()
+  
+  res.status(200).json({
+    msg: "success",
+    listReview
+  })
+}
+
+async function findByCate(req, res) {
+  const categoryId = req.body;
+  const listReview = await Review.find({
+    category: categoryId
+  })
+  
+  res.status(200).json({
+    msg: "success",
+    listReview
+  })
+}
+
+async function cloneReview(req, res) {
+  
 }
 
 async function createOne(req, res) {
@@ -149,6 +162,10 @@ const createReview = (req, res) => {
   console.log("created");
 };
 
+const shareReview = (req, res) => {
+  cloneReview(req, res)
+}
+
 //REST API PUT=================================================
 const updateReview = (req, res) => {
   updateOne(req, res);
@@ -165,4 +182,5 @@ module.exports = {
   createReview,
   updateReview,
   deleteReview,
+  shareReview
 };
